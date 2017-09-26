@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <center>
+        <h1>ChatRoom</h1>
+    </center>
+    <hr>
+    <input type="text" id="send_text">
+    <br>
+    <button id="send_btn">发送</button>
+    <script type="text/javascript">
+        var websocket = new WebSocket("ws://localhost:23000");
+
+        websocket.onopen = function () {
+            console.log("websocket open");
+            document.getElementById('send_btn').onclick = function () {
+                var txt = document.getElementById('send_text').value;
+                if (txt) {
+                    websocket.send(txt);
+                }
+            }
+        }
+
+        websocket.onclose = function () {
+            console.log("websocket close!");
+        }
+
+        websocket.onmessage = function (e) {
+            console.log(e.data);
+            showMessage(e.data);
+        }
+
+        function showMessage(str) {
+            var div = document.createElement('div');
+            var data = JSON.parse(str);
+
+            if(data.nickname && data.nickname.length > 0) {
+                div.innerHTML = data.nickname + ": " + data.message;
+            } else {
+                div.innerHTML = data.message;
+            }
+            document.body.appendChild(div);
+        }
+    </script>
+</body>
+
+</html>
