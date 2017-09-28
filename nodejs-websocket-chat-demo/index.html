@@ -14,10 +14,10 @@
     </center>
     <hr>
     <input type="text" id="send_text">
-    <br>
+    
     <button id="send_btn">发送</button>
     <script type="text/javascript">
-        var websocket = new WebSocket("ws://localhost:23000");
+        var websocket = new WebSocket("ws://chat_local.ryoma.com/ws/");
 
         websocket.onopen = function () {
             console.log("websocket open");
@@ -26,6 +26,8 @@
                 if (txt) {
                     websocket.send(txt);
                 }
+                
+                document.getElementById('send_text').value = "";
             }
         }
 
